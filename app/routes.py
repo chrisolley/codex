@@ -27,6 +27,27 @@ def autocomplete():
     return jsonify(matching_results=results)
 
 
+@app.route('/load_more_books', methods=['GET'])
+def load_more_books():
+    random_books = Book.query.order_by(func.random()).limit(12)
+    html = ""
+    for i in range(3):
+        html += """<div class="row">"""
+        for book in random_books[i:i+3]:
+            html += f"""
+                <div class="col-sm-4 mb-5">
+                    <div class="card">
+                        <a href="book/{book.id}"><img src="{book.cover_img}" class="card-img-top" alt="book_cover"></a>
+                        <div class="card-body">
+                            <h5 class="card-title text-center"><a href="book/{book.id}">{book.title}</a></h5>
+                        </div>
+                    </div>
+                </div>
+            """
+        html += """</div>"""
+    return html
+
+
 @app.route('/favicon.ico')
 def favicon():
     return app.send_static_file('images/book_open.ico')
