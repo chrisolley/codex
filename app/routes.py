@@ -1,0 +1,53 @@
+from app import app
+from app.models import db, Book
+from flask import render_template, jsonify, request
+from sqlalchemy.sql.expression import func
+import numpy as np
+from sklearn.metrics.pairwise import linear_kernel
+
+
+@app.route('/')
+def index():
+    random_books = Book.query.order_by(func.random()).limit(12)
+    return render_template('index.html', random_books=random_books)
+
+
+@app.route('/book/<int:book_id>')
+def book(book_id):
+    book = Book.query.filter_by(id=book_id).one()
+    k_nearest_books = get_k_nearest_books(book_id)
+    return render_template('book.html', book=book, nearest_books=k_nearest_books)
+
+
+@app.route('/autocomplete', methods=['GET'])
+def autocomplete():
+    search = request.args.get('q')
+    query = db.session.query(Book.id, Book.title).filter(Book.title.like('%' + str(search) + '%'))
+    results = [{'label': b[1], 'value': b[0]} for b in query.all()]
+    return jsonify(matching_results=results)
+
+
+@app.route('/favicon.ico')
+def favicon():
+    return app.send_static_file('images/book_open.ico')
+
+
+def get_k_nearest_books(book_id, k=5):
+    similarity = linear_kernel(app.tfidf[book_id], app.tfidf).flatten()
+    indices = np.argsort(similarity)[-k-1:-1][::-1].tolist()
+    scores = similarity[indices]
+    books = Book.query.filter(Book.id.in_(indices)).all()
+    return [
+        {
+            'id': book.id,
+            'title': book.title,
+            'score': score,
+            'similar_words': ', '.join(get_k_similar_words(book.id, book_id))
+        } for book, score in zip(books, scores)
+    ]
+
+
+def get_k_similar_words(book_id_1, book_id_2, k=5):
+    element_indices = list(np.argsort(np.multiply(app.tfidf[book_id_1].toarray().flatten(),
+                                                  app.tfidf[book_id_2].toarray().flatten()))[-k:][::-1])
+    return [app.vocab[i] for i in element_indices]

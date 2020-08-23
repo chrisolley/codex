@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card mb-3 border-dark">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="{{ book.cover_img }}" class="img-fluid" alt="book_cover" width="100%">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3>{{ book.title }} by <i>{{ book.author }}</i> ({{ book.year | int }})</h3>
+                            <p class="card-text">{{ book.description }}</p>
+                            <h5>Top words: </h5>
+                            <p>{{ book.top_tfidf_words }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card mb-3 border-dark">
+                <div class="card-body">
+                    <h3>Similar Books: </h3>
+                    {% for book in nearest_books %}
+                        <p><a href="{{ url_for('book', book_id=book['id']) }}">{{ book['title'] }}</a>: {{ "%.5f" | format(book['score']) }} </p>
+                        <p>({{ book['similar_words'] }})</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

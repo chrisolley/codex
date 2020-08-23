@@ -1,0 +1,23 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+numpy = "*"
+scikit-learn = "*"
+beautifulsoup4 = "*"
+pandas = "*"
+flask = "*"
+requests = "*"
+ipython = "*"
+matplotlib = "*"
+seaborn = "*"
+python-dotenv = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+
+[requires]
+python_version = "3.8"
