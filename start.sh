@@ -14,4 +14,4 @@ fi
 # EOF
 ./create_db.sh
 
-gunicorn --workers=4 --bind=0.0.0.0:5000 app:app
+gunicorn --workers=4 app:app
