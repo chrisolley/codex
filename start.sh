@@ -14,4 +14,4 @@ fi
 # EOF
 ./create_db.sh
 
-gunicorn --workers=4 app:app
+gunicorn --workers=4 wsgi:app

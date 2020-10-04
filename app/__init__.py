@@ -1,21 +1,18 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 from app.config import Config
 
-import scipy.sparse
-import pickle
+db = SQLAlchemy()
 
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
-app.tfidf = scipy.sparse.load_npz('./data/tfidf_sparse.npz')
+def create_app():
+    """Construct the core application"""
 
-with open('./data/vectorizer.pickle', 'rb') as f:
-    app.vectorizer = pickle.load(f)
-    app.vocab = app.vectorizer.get_feature_names()
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    db.init_app(app)
 
-from app import routes, models
+    with app.app_context():
+        from . import routes
 
+    return app

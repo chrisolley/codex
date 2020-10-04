@@ -1,9 +1,18 @@
-from app import app
+from flask import current_app as app
 from app.models import db, Book
 from flask import render_template, jsonify, request
 from sqlalchemy.sql.expression import func
 import numpy as np
 from sklearn.metrics.pairwise import linear_kernel
+import scipy
+import pickle
+
+app.tfidf = scipy.sparse.load_npz('./data/tfidf_sparse.npz')
+
+with open('./data/vectorizer.pickle', 'rb') as f:
+    app.vectorizer = pickle.load(f)
+
+app.vocab = app.vectorizer.get_feature_names()
 
 
 @app.route('/')
