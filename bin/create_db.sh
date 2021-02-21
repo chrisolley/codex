@@ -1,3 +1,11 @@
+if [ ! -d ./data ];
+then
+	mkdir ./data
+	aws s3 cp s3://book-rec/books.csv ./data/books.csv
+	aws s3 cp s3://book-rec/tfidf_sparse.npz ./data/tfidf_sparse.npz
+	aws s3 cp s3://book-rec/vectorizer.pickle ./data/vectorizer.pickle
+fi
+
 sqlite3 app/app.db <<EOF
 DROP TABLE IF EXISTS book;
 CREATE TABLE book(
