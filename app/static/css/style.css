@@ -4,6 +4,10 @@
     object-fit: contain;
 }
 
+#header-img {
+    height: 3rem;
+}
+
 input {
     width: 100%
 }
@@ -17,7 +21,14 @@ input {
     top: 0;
     z-index: 999;
     background-color: white;
+}
 
+#header a {
+    text-decoration: none;
+}
+
+#title-col:hover {
+    opacity: .5;
 }
 
 #content {

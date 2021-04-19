@@ -59,7 +59,7 @@ def load_more_books():
 
 @app.route('/favicon.ico')
 def favicon():
-    return app.send_static_file('images/book_open.ico')
+    return app.send_static_file('images/book.png')
 
 
 def get_k_nearest_books(book_id, k=5):

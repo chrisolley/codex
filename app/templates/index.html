@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!--    <h3>Some random books</h3>-->
     {% for i in range(3) %}
         <div class="row">
             {% for b in random_books[i:i+3] %}
