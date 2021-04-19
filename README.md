@@ -1,4 +1,4 @@
-#Codex
+# Codex
 
 ### https://codex-book-app.herokuapp.com/
 
@@ -25,5 +25,5 @@ docker build -t cortex
 docker run -p 8000:8000 -v ~/.aws:/root/.aws:ro cortex
 ```
 
-where the second command assumes you have AWS credentials at the appropriate location, for downloading of data from S3.
+where the second command assumes you have AWS credentials at the appropriate location, for downloading data from S3.
 
